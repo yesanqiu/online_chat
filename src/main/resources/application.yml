@@ -1,0 +1,22 @@
+server:
+  port: 25502
+spring:
+  application:
+    name: online_chat
+  jackson:
+    date-format: yyyy-MM-dd hh:mm:ss
+    time-zone: GMT+8
+  datasource:
+    name: hdtyglxt
+    url: jdbc:mysql://localhost:${MYSQL_PORT:3306}/online_chat?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+    # druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  messages:
+    encoding: UTF-8
+    basename: i18n/abt_messages
+    use-code-as-default-message: true
+  mvc:
+    static-path-pattern: /**
