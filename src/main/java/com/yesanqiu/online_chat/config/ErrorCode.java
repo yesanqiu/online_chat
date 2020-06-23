@@ -12,6 +12,7 @@ public enum ErrorCode {
     LOGIN_FAIL_SHORT_PSW("206","登录失败-密码长度小于6个字符"),
     LOGIN_FAIL_ERROR_PSW("207","登录失败-密码不匹配"),
     UNLOGIN("208","未登录"),
+    NO_USER("209","没有此用户"),
 
     ;
 

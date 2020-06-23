@@ -4,18 +4,23 @@ import com.yesanqiu.online_chat.GetIds;
 import com.yesanqiu.online_chat.base.dto.ResultDTO;
 import com.yesanqiu.online_chat.base.util.ResultUtil;
 import com.yesanqiu.online_chat.config.ErrorCode;
+import com.yesanqiu.online_chat.entity.Friends;
+import com.yesanqiu.online_chat.entity.Message;
+import com.yesanqiu.online_chat.entity.NewFriends;
 import com.yesanqiu.online_chat.entity.User;
 import com.yesanqiu.online_chat.service.FriendsService;
+import com.yesanqiu.online_chat.service.MessageService;
+import com.yesanqiu.online_chat.service.NewFriendsService;
 import com.yesanqiu.online_chat.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -27,6 +32,12 @@ public class UserController {
 
     @Autowired
     private FriendsService friendsService;
+
+    @Autowired
+    private NewFriendsService newFriendsService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     private GetIds getIds;
@@ -92,6 +103,70 @@ public class UserController {
 //
 //
 //    }
+
+    @GetMapping("/getMyFriends")
+    public ResultDTO getMyFriends(HttpServletRequest request)throws Exception{
+        log.info("接口：getMyFriends");
+        User u = (User) request.getSession().getAttribute("user");
+        if(u == null){
+            log.info("未登录");
+            return ResultUtil.Error(ErrorCode.UNLOGIN);
+        }
+        List<User> users = new ArrayList<>();
+        for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),1))){
+            users.add(userService.get(f.getFUserId()));
+        }
+        for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),0))){
+            users.add(userService.get(f.getMUserId()));
+        }
+        return ResultUtil.Success(users);
+    }
+
+    @GetMapping("/getUser")
+    public ResultDTO getUser(String userId)throws Exception{
+        log.info("接口：getUser");
+        if(userService.get(userId) != null){
+            return ResultUtil.Success();
+        }else{
+            return ResultUtil.Error(ErrorCode.NO_USER);
+        }
+    }
+
+
+    @GetMapping("/getMyNewFriends")
+    public ResultDTO getMyNewFriends(HttpServletRequest request)throws Exception{
+        log.info("接口：getMyNewFriends");
+        User u = (User) request.getSession().getAttribute("user");
+        if(u == null){
+            log.info("未登录");
+            return ResultUtil.Error(ErrorCode.UNLOGIN);
+        }
+        List<User> users = new ArrayList<>();
+        for(NewFriends nf:newFriendsService.findByParams(new NewFriends(u.getUserId()))){
+            users.add(userService.get(nf.getMId()));
+        }
+        return ResultUtil.Success(users);
+    }
+
+    @GetMapping("/getMessage")
+    public ResultDTO getMessage(String fId,HttpServletRequest request)throws Exception{
+        log.info("接口：getMessage");
+        User u = (User) request.getSession().getAttribute("user");
+        if(u == null){
+            log.info("未登录");
+            return ResultUtil.Error(ErrorCode.UNLOGIN);
+        }
+        List<Message> messages = messageService.findMessage(u.getUserId(),fId);
+        List<Message> messages1 = messageService.findMessage(fId,u.getUserId());
+        messages.addAll(messages1);
+        messages.sort(new Comparator<Message>() {
+            @Override
+            public int compare(Message o1, Message o2) {
+                return (int) (o2.getTime().getTime() -  o1.getTime().getTime());
+            }
+        });
+        return ResultUtil.Success(messages);
+    }
 
 
     public String getId(int idsLength){

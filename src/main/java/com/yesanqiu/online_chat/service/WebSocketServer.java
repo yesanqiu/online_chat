@@ -1,5 +1,10 @@
 package com.yesanqiu.online_chat.service;
 
+import com.yesanqiu.online_chat.entity.Friends;
+import com.yesanqiu.online_chat.entity.Message;
+import com.yesanqiu.online_chat.entity.NewFriends;
+import com.yesanqiu.online_chat.util.MsgUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -13,6 +18,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ServerEndpoint("/webSocket/{sid}")
 @Component
 public class WebSocketServer{
+
+    @Autowired
+    private FriendsService friendsService;
+
+    @Autowired
+    private NewFriendsService newFriendsService;
+
+    @Autowired
+    private MessageService messageService;
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static AtomicInteger onlineNum = new AtomicInteger();
@@ -63,16 +77,45 @@ public class WebSocketServer{
     //收到客户端信息
     @OnMessage
     public void onMessage(String message) throws IOException{
-        message = "客户端：" + message + ",已收到";
-        System.out.println(message);
-        for (Session session: sessionPools.values()) {
-            try {
-                sendMessage(session, message);
-            } catch(Exception e){
-                e.printStackTrace();
-                continue;
+
+        int a = MsgUtil.sortMsg(message);
+        if(a != 0){
+            if (a == 1){
+                try {
+                    messageService.save(new Message(MsgUtil.sid,MsgUtil.oid,MsgUtil.message));
+                    sendInfo(MsgUtil.oid,message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            if(a == 2){
+                try {
+                    newFriendsService.save(new NewFriends(MsgUtil.fid,MsgUtil.mid));
+                    sendInfo(MsgUtil.fid,message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(a == 3){
+                //添加好友操作
+                try {
+                    friendsService.save(new Friends(MsgUtil.mUserId,MsgUtil.fUserId));
+                    sendInfo(MsgUtil.fUserId,message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            message = "客户端：" + message + ",已收到";
+            System.out.println(message);
         }
+//        for (Session session: sessionPools.values()) {
+//            try {
+//                sendMessage(session, message);
+//            } catch(Exception e){
+//                e.printStackTrace();
+//                continue;
+//            }
+//        }
     }
 
     //错误时调用

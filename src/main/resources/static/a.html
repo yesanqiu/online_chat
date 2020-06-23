@@ -26,7 +26,7 @@
             //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
             var userId = document.getElementById('userId').value;
             // var socketUrl="ws://127.0.0.1:22599/webSocket/"+userId;
-            var socketUrl="ws://localhost:25502/webSocket/"+userId;
+            var socketUrl="ws://yesanqiu.top:25502/webSocket/"+userId;
             console.log(socketUrl);
             if(socket!=null){
                 socket.close();
@@ -60,9 +60,10 @@
             console.log("您的浏览器不支持WebSocket");
         }else {
             // console.log("您的浏览器支持WebSocket");
+            var userId = document.getElementById('userId').value;
             var toUserId = document.getElementById('toUserId').value;
             var contentText = document.getElementById('contentText').value;
-            var msg = '{"toUserId":"'+toUserId+'","contentText":"'+contentText+'"}';
+            var msg = '#M:'+toUserId + ':' + userId+'#qq#' + contentText;
             console.log(msg);
             socket.send(msg);
         }

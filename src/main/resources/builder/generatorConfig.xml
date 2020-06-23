@@ -29,7 +29,8 @@
                              type="XMLMAPPER"/>
 
 <!--        <table tableName="house"/>-->
-        <table tableName="friends"/>
+        <table tableName="new_friends"/>
+        <table tableName="message"/>
 <!--        <table tableName="ground"/>-->
 <!--        <table tableName="ground_book"/>-->
 <!--        <table tableName="gb_time"/>-->

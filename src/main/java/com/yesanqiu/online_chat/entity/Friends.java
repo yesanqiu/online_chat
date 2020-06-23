@@ -26,4 +26,17 @@ public class Friends {
     public static final String M_USER_ID = "mUserId";
 
     public static final String F_USER_ID = "fUserId";
+
+    public Friends(String mUserId,String fUserId){
+        this.mUserId = mUserId;
+        this.fUserId = fUserId;
+    }
+    public Friends(String mUserId,int m){
+        if(m == 1){
+            this.mUserId = mUserId;
+        }else{
+            this.fUserId = mUserId;
+        }
+    }
+
 }
