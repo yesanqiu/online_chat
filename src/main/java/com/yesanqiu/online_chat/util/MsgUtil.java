@@ -25,8 +25,9 @@ public class MsgUtil {
             if(a == 'M'){
                 log.info("M");
                 //#M:oid:sid#qq#message
-                oid = msg.substring(3,msg.indexOf(":"));
-                sid = msg.substring(msg.indexOf(":")+1,msg.lastIndexOf(":"));
+                System.out.println(msg.indexOf(":"));
+                oid = msg.substring(3,13);
+                sid = msg.substring(14,msg.lastIndexOf("#qq#"));
                 message = msg.substring(msg.lastIndexOf("#qq#")+1,msg.length());
                 System.out.println("oid:" +oid+",message:" + message);
                 return 1;

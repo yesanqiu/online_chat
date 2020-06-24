@@ -19,14 +19,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class WebSocketServer{
 
-    @Autowired
-    private FriendsService friendsService;
+    private static FriendsService friendsService;
+
+    private static NewFriendsService newFriendsService;
+
+    private static MessageService messageService;
 
     @Autowired
-    private NewFriendsService newFriendsService;
+    public void setFriendsService(FriendsService friendsService) {
+        WebSocketServer.friendsService = friendsService;
+    }
 
     @Autowired
-    private MessageService messageService;
+    public void setNewFriendsService(NewFriendsService newFriendsService) {
+        WebSocketServer.newFriendsService = newFriendsService;
+    }
+
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        WebSocketServer.messageService = messageService;
+    }
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static AtomicInteger onlineNum = new AtomicInteger();
@@ -90,6 +102,7 @@ public class WebSocketServer{
             }
             if(a == 2){
                 try {
+                    System.out.println(newFriendsService == null);
                     newFriendsService.save(new NewFriends(MsgUtil.fid,MsgUtil.mid));
                     sendInfo(MsgUtil.fid,message);
                 } catch (Exception e) {
