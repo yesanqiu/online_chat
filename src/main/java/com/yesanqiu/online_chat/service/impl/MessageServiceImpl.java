@@ -21,4 +21,9 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageMapper, Message> 
     public List<Message> findMessage(String sId, String oId) {
         return messageMapper.findMessage(sId,oId);
     }
+
+    @Override
+    public Message newMessage(String sId, String oId) {
+        return messageMapper.newMessage(sId,oId);
+    }
 }

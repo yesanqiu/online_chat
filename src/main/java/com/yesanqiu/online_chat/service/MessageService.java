@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface MessageService extends BaseService<Message> {
 
-    List<Message> findMessage(String mId,String fId);
+    List<Message> findMessage(String sId,String oId);
+
+    Message newMessage(String sId,String oId);
 }

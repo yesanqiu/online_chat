@@ -4,6 +4,7 @@ import com.yesanqiu.online_chat.GetIds;
 import com.yesanqiu.online_chat.base.dto.ResultDTO;
 import com.yesanqiu.online_chat.base.util.ResultUtil;
 import com.yesanqiu.online_chat.config.ErrorCode;
+import com.yesanqiu.online_chat.dto.FriendsDTO;
 import com.yesanqiu.online_chat.entity.Friends;
 import com.yesanqiu.online_chat.entity.Message;
 import com.yesanqiu.online_chat.entity.NewFriends;
@@ -112,12 +113,12 @@ public class UserController {
             log.info("未登录");
             return ResultUtil.Error(ErrorCode.UNLOGIN);
         }
-        List<User> users = new ArrayList<>();
+        List<FriendsDTO> users = new ArrayList<>();
         for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),1))){
-            users.add(userService.get(f.getFUserId()));
+            users.add(new FriendsDTO(userService.get(f.getFUserId()),messageService.newMessage(f.getFUserId(),u.getUserId())));
         }
         for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),0))){
-            users.add(userService.get(f.getMUserId()));
+            users.add(new FriendsDTO(userService.get(f.getMUserId()),messageService.newMessage(f.getMUserId(),u.getUserId())));
         }
         return ResultUtil.Success(users);
     }
