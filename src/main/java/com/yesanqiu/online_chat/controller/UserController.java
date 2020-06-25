@@ -169,6 +169,11 @@ public class UserController {
         return ResultUtil.Success(messages);
     }
 
+    @GetMapping("/findUser")
+    public ResultDTO findUser(String userId)throws Exception{
+        return ResultUtil.Success(userService.get(userId));
+    }
+
 
     public String getId(int idsLength){
         String r = "";
