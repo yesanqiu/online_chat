@@ -163,7 +163,7 @@ public class UserController {
         messages.sort(new Comparator<Message>() {
             @Override
             public int compare(Message o1, Message o2) {
-                return (int) (o2.getTime().getTime() -  o1.getTime().getTime());
+                return (int) (o1.getTime().getTime() -  o2.getTime().getTime());
             }
         });
         return ResultUtil.Success(messages);
