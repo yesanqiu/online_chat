@@ -115,10 +115,10 @@ public class UserController {
         }
         List<FriendsDTO> users = new ArrayList<>();
         for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),1))){
-            users.add(new FriendsDTO(userService.get(f.getFUserId()),messageService.newMessage(f.getFUserId(),u.getUserId())));
+            users.add(new FriendsDTO(userService.get(f.getFUserId()),messageService.newMessage(f.getFUserId(),u.getUserId()),false));
         }
         for(Friends f:friendsService.findByParams(new Friends(u.getUserId(),0))){
-            users.add(new FriendsDTO(userService.get(f.getMUserId()),messageService.newMessage(f.getMUserId(),u.getUserId())));
+            users.add(new FriendsDTO(userService.get(f.getMUserId()),messageService.newMessage(f.getMUserId(),u.getUserId()),false));
         }
         return ResultUtil.Success(users);
     }

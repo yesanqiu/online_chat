@@ -14,4 +14,5 @@ public class FriendsDTO {
 
     private User friends;
     private Message message;
+    private boolean hasMessage;
 }
