@@ -102,8 +102,9 @@ public class WebSocketServer{
             }
             if(a == 2){
                 try {
-                    System.out.println(newFriendsService == null);
-                    newFriendsService.save(new NewFriends(MsgUtil.fid,MsgUtil.mid));
+                    if(newFriendsService.findByParams(new NewFriends(MsgUtil.fid,MsgUtil.mid)).size() == 0) {
+                        newFriendsService.save(new NewFriends(MsgUtil.fid, MsgUtil.mid));
+                    }
                     sendInfo(MsgUtil.fid,message);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -112,7 +113,10 @@ public class WebSocketServer{
             if(a == 3){
                 //添加好友操作
                 try {
-                    friendsService.save(new Friends(MsgUtil.mUserId,MsgUtil.fUserId));
+                    if(friendsService.findByParams(new Friends(MsgUtil.mUserId,MsgUtil.fUserId)).size() == 0){
+                        friendsService.save(new Friends(MsgUtil.mUserId,MsgUtil.fUserId));
+                    }
+                    newFriendsService.delete(new NewFriends(MsgUtil.mUserId,MsgUtil.fUserId));
                     sendInfo(MsgUtil.fUserId,message);
                 } catch (Exception e) {
                     e.printStackTrace();
