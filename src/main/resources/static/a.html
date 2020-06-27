@@ -81,7 +81,7 @@
             var toUserId = document.getElementById('toUserId').value;
             var contentText = document.getElementById('contentText').value;
             // var msg = '#M:'+toUserId + ':' + userId+'#qq#' + contentText;
-            var msg = '#F:'+toUserId + ':' + userId;
+            var msg = '#F:'+userId + ':' + toUserId;
             console.log(msg);
             socket.send(msg);
         }
@@ -96,7 +96,7 @@
             var toUserId = document.getElementById('toUserId').value;
             var contentText = document.getElementById('contentText').value;
             // var msg = '#M:'+toUserId + ':' + userId+'#qq#' + contentText;
-            var msg = '#Y:'+toUserId + ':' + userId;
+            var msg = '#Y:'+userId + ':' + toUserId;
             console.log(msg);
             socket.send(msg);
         }
